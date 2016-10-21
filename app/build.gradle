@@ -1,27 +1,125 @@
+/**
+ * apply plugin: xx，代表gradle要加载xx插件。
+ * 这里加载了插件com.android.application，代表这个项目是个android应用，构建的时候走android应用的构建流程，打包后生成.apk文件。
+ * 如果是android依赖库的话，就是com.android.library，打包后生产.aar文件
+ */
 apply plugin: 'com.android.application'
 
+/**
+ * android领域设置了一些和android项目编译、运行相关的配置
+ */
 android {
+
+    //编译android程序时使用的SDK版本
     compileSdkVersion 23
+    //编译工具版本
     buildToolsVersion "23.0.3"
 
+    //android应用的一些声明
     defaultConfig {
+        //包名(话说在这里声明了有啥用？不都是在AndroidManifest.xml里写好的么...)
         applicationId "com.daren.drnote"
+        //最小支持的运行环境版本，现在一般指定为android 4.0(即此程序只能在android 4.0以上的系统里运行)
         minSdkVersion 14
+        //目标SDK版本(23对应android 6.0)
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        //应用版本号，给设备程序识别版本(升级)用的，必须是一个interger值
+        versionCode 100
+        //应用版本号，由三部分组成<major>.<minor>.<point>，该值是个字符串，可以显示给用户
+        versionName "1.0.0"
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+    //应用打包时的不同类型的配置
+    signingConfigs {
+
+        debug {
+
         }
+
+        release {
+            //签名文件所在文件路径
+            storeFile file('key/keystore.jks')
+            //签名文件的密码
+            storePassword "drnote"
+            //key的别名
+            keyAlias "drnote"
+            //key的密码
+            keyPassword "drnote"
+        }
+    }
+
+    //打包类型，默认有Debug(开发调试版)和Release(正式发行版)2种类型，也可以自定义打包类型
+    buildTypes {
+
+        //debug包的配置
+        debug {
+            signingConfig signingConfigs.debug
+            minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+        }
+
+        //release包的配置
+        release {
+
+            //release版本采用signingConfigs里定义的keystore来签名
+            signingConfig signingConfigs.release
+
+            //是否开启混淆(混淆代码，精简资源，压缩apk体积)
+            minifyEnabled true
+            /**
+             * 混淆配置文件，开启minifyEnabled才生效。默认混淆配置为proguard-android.txt，自定义混淆规则在proguard-rules.pro
+             * 混淆规则由默认和自定义2个文件里的内容，共同组成
+             */
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            //删除无用的资源
+            shrinkResources true
+
+        }
+    }
+
+    dexOptions {
+        //使用增量编译，加快每次的编译速度
+        incremental true
+        //增加堆内存的最大值到4g，防止编译时频繁的内存溢出(OOM)
+        javaMaxHeapSize "4g"
+    }
+
+    lintOptions {
+        //设置是否在lint发生错误时终止构建，这里设置为：不停止构建
+        abortOnError false
+    }
+
+    //编译设置
+    compileOptions {
+        //使用java1.7编译，对所有task生效
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    //apk包的一些设置
+    packagingOptions {
+        //打包时排除以下的文件，避免混合文件时文件冲突导致打包发生错误
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude '**/.DS_Store'
     }
 }
 
+/**
+ * 项目的依赖管理配置
+ * 【注意】依赖库的版本号最好写为固定值，如果需要更新去手动更新。
+ * 避免出现更新后api不兼容、打包时网络不好一直卡在更新依赖等问题
+ */
 dependencies {
+    //项目依赖libs文件夹下所有的jar包
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    //项目依赖测试库
     testCompile 'junit:junit:4.12'
+
+    //项目依赖一些远程的android基础库
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
 }

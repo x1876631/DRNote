@@ -1,19 +1,32 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+// buildscript声明了gradle脚本自身需要使用的资源
 buildscript {
+    /**
+     * repositories声明依赖库的来源。
+     * gradle构建过程中所需要的库会去jcenter中央库获取(jcenter兼容maven中心仓库，而且性能更优)。
+     * 也可以添加自己搭建的maven库。
+     */
     repositories {
         jcenter()
     }
+
+    /**
+     * 声明Android Studio的gradle构建插件的依赖库版本。AS之所以能使用gradle就是因为有这个插件。
+     * 注意，插件的版本和gradle版本有其自己的对应关系，不是2.0对2.0这种关系。
+     */
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0'
+        classpath 'com.android.tools.build:gradle:2.1.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
+// allprojects声明项目下所有的module的统一配置。
 allprojects {
     repositories {
+        //这里也声明了依赖库的来源。不过这个是为android应用项目声明的，而buildscript是为gradle构建脚本声明的
         jcenter()
     }
 }
