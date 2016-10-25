@@ -1,0 +1,37 @@
+//task hello() {
+//    println('hello default')
+//    doFirst {
+//
+//    }
+//    doLast {
+//        println("hello last")
+//    }
+//}
+
+//hello.doFirst {
+//    println('hello first')
+//}
+//hello.doLast {
+//    println('hello last')
+//}
+//hello << {
+//    println('single last')
+//}
+//
+//task dependsHello(dependsOn: hello) << {
+//    println("dependson hello")
+//}
+
+
+dependencies {
+    /**
+     * 项目依赖学习：可以注释or打开依赖，再进入app模块，执行gradle dependencies，查看模块的依赖树。
+     * 发现gradle并不会重复编译项目，而是排除了重复的依赖
+     * 比如app依赖gradletest，gradletest又依赖了gradletest2。然后再让app依赖gradletest2。
+     * 编译app时并不会编译2遍gradletest2。
+     * 如果先获取了gradletest的配置，就会忽略gradletest2。如果先获取了gradletest2的配置，就会忽略gradletest里的依赖
+     * 具体的可以尝试修改1和2的位置，然后执行gradle dependencies查看依赖树里的依赖和忽略关系(带*的表示忽略依赖)
+     */
+    compile project(':gradletest2')
+    compile project(':gradletest')
+}

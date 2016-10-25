@@ -1,1 +1,4 @@
+//依赖的项目都需要在这里include一下，不然gradle构建时会找不到依赖库
 include ':app'
+include ':gradletest'
+include ':gradletest2'

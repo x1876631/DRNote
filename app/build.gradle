@@ -109,17 +109,21 @@ android {
 
 /**
  * 项目的依赖管理配置
- * 【注意】依赖库的版本号最好写为固定值，如果需要更新去手动更新。
+ * 【注意1】依赖库的版本号最好写为固定值，如果需要更新去手动更新。
  * 避免出现更新后api不兼容、打包时网络不好一直卡在更新依赖等问题
+ * 【注意2】依赖库的格式：group:name:version
  */
 dependencies {
     //项目依赖libs文件夹下所有的jar包
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    //项目依赖测试库
+    //testCompile表示测试期编译需要的附加依赖，这里依赖了4.12版本的junit库
     testCompile 'junit:junit:4.12'
 
     //项目依赖一些远程的android基础库
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
 }
+
+//学习gradle时用的test配置
+apply from: file('../studyGradleBuild.gradle')
