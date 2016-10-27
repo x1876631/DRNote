@@ -23,7 +23,7 @@ buildscript {
     }
 }
 
-// allprojects声明项目下所有的module的统一配置。
+// allprojects声明项目下所有的module的统一配置。但为了各模块的个性化配置，最好不要在这里写太多配置
 allprojects {
     repositories {
         //这里也声明了依赖库的来源。不过这个是为android应用项目声明的，而buildscript是为gradle构建脚本声明的

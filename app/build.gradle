@@ -2,6 +2,8 @@
  * apply plugin: xx，代表gradle要加载xx插件。
  * 这里加载了插件com.android.application，代表这个项目是个android应用，构建的时候走android应用的构建流程，打包后生成.apk文件。
  * 如果是android依赖库的话，就是com.android.library，打包后生产.aar文件
+ *
+ * android插件提供了android项目编译、打包等必需的task，执行gradle build之类的命令时，编译、打包等功能就是由android插件实现的
  */
 apply plugin: 'com.android.application'
 
@@ -17,7 +19,7 @@ android {
 
     //android应用的一些声明
     defaultConfig {
-        //包名(话说在这里声明了有啥用？不都是在AndroidManifest.xml里写好的么...)
+        //包名(以前的版本包名是声明在AndroidManifest.xml里的，现在声明在build.gradle里，这里的声明会覆盖xml的声明)
         applicationId "com.daren.drnote"
         //最小支持的运行环境版本，现在一般指定为android 4.0(即此程序只能在android 4.0以上的系统里运行)
         minSdkVersion 14
@@ -48,7 +50,10 @@ android {
         }
     }
 
-    //打包类型，默认有Debug(开发调试版)和Release(正式发行版)2种类型，也可以自定义打包类型
+    /**
+     * 打包类型，默认有Debug(开发调试版)和Release(正式发行版)2种类型，也可以自定义打包类型
+     * 每添加一个buildTypes都会自动生成一个对应的assemble
+     */
     buildTypes {
 
         //debug包的配置
@@ -125,5 +130,5 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
 }
 
-//学习gradle时用的test配置
+//集成了学习gradle相关知识写的一些测试效果的代码，以后不需要时直接干掉
 apply from: file('../studyGradleBuild.gradle')
